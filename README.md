@@ -25,7 +25,7 @@ QueryMind is an AI-powered sales analytics dashboard that converts plain English
 
 ## 🚀 Live Demo
 
-🔗 [querymind.streamlit.app](https://querymind.streamlit.app) *(replace with your actual URL)*
+🔗 [querymind.streamlit.app](https://querymind-14.streamlit.app/)
 
 ---
 
