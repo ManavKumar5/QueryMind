@@ -233,7 +233,7 @@ SCHEMA = """
 Table: sales (PostgreSQL)
 Columns:
 - order_id VARCHAR
-- order_date DATE
+- order_date TEXT (stored as text, ALWAYS cast to DATE before use: order_date::DATE)
 - city VARCHAR (Mumbai, Pune, Ahmedabad, Surat, Delhi, Jaipur, Lucknow, Chandigarh, Bangalore, Chennai, Hyderabad, Kochi, Kolkata, Bhubaneswar, Patna, Guwahati)
 - region VARCHAR (West, North, South, East)
 - category VARCHAR (Electronics, Fashion, Home & Kitchen, Sports, Books, Beauty, Toys, Grocery)
@@ -309,6 +309,9 @@ def fix_sql(sql):
         "row",
         "rows",
     ]
+    # Fix: order_date is stored as TEXT, must be cast to DATE for date functions
+    sql = re.sub(r"\border_date\b(?!::)", "order_date::DATE", sql, flags=re.IGNORECASE)
+
     # Fix: PostgreSQL ROUND(double precision, int) is not supported.
     # Cast the first argument to NUMERIC when it's missing the cast.
     # Matches ROUND( <expr without ::NUMERIC>, <digit> )
