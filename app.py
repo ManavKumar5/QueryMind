@@ -278,7 +278,7 @@ Rules:
 - Return ONLY the raw SQL query, absolutely nothing else
 - No markdown, no backticks, no explanation, no comments
 - Use LIMIT 20 unless user asks for more or it is a window function query
-- Use ROUND() for all decimals to 2 places
+- Use ROUND() for all decimals to 2 places — ALWAYS cast to numeric first: ROUND(expr::NUMERIC, 2). Never use ROUND(double_precision_col, 2) directly as PostgreSQL does not support it.
 - Use clear descriptive column aliases with AS
 - NEVER use reserved words as aliases — never use: rank, order, group, row, index, key, select, where, value
 - Instead use suffixed aliases: city_rank, sales_order, profit_group, row_num
@@ -309,6 +309,16 @@ def fix_sql(sql):
         "row",
         "rows",
     ]
+    # Fix: PostgreSQL ROUND(double precision, int) is not supported.
+    # Cast the first argument to NUMERIC when it's missing the cast.
+    # Matches ROUND( <expr without ::NUMERIC>, <digit> )
+    sql = re.sub(
+        r"ROUND\((?!.*::NUMERIC)(.*?),\s*(\d+)\)",
+        lambda m: f"ROUND(({m.group(1)})::NUMERIC, {m.group(2)})",
+        sql,
+        flags=re.IGNORECASE,
+    )
+
     for word in reserved:
         sql = re.sub(rf"\bAS\s+{word}\b", f"AS {word}_val", sql, flags=re.IGNORECASE)
         sql = re.sub(
