@@ -508,7 +508,7 @@ st.markdown(
             <div class="hero-stat-label">Categories</div>
         </div>
         <div class="hero-stat">
-            <div class="hero-stat-num">2yr</div>
+            <div class="hero-stat-num">2 years</div>
             <div class="hero-stat-label">Data Range</div>
         </div>
     </div>
@@ -567,5 +567,5 @@ if question:
                 st.markdown("</div>", unsafe_allow_html=True)
 
         except Exception as e:
-            st.error(f"❌ {str(e)}")
-            st.info("💡 Try rephrasing your question.")
+            st.error(f" {str(e)}")
+            st.info(" Try rephrasing your question.")
