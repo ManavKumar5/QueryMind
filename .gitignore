@@ -208,3 +208,4 @@ __marimo__/
 
 ecommerce_sales.csv
 load.py
+.env
